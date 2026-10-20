@@ -12,6 +12,7 @@ from app.common.exceptions import (
     validation_excpetion_hadler,
     global_excpetion_hadler,
 )
+from starlette.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
@@ -23,6 +24,19 @@ app.add_exception_handler(HTTPException, http_excpetion_hadler)
 app.add_exception_handler(RequestValidationError, validation_excpetion_hadler)
 # 全局的异常兜底，必须放在最后注册！！
 app.add_exception_handler(Exception, global_excpetion_hadler)
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,  # 允许携带cookie
+    allow_methods=["*"],  # 允许的请求方法
+    allow_headers=["*"],  # 允许的请求头
+)
 
 
 @app.get("/")

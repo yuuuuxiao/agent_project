@@ -24,5 +24,6 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
 
     token = create_access_token(user.id)
     return Response.success(
-        data=LoginResponse(token=token,user=UserResponse.model_validate(user))
+        message="登陆成功",
+        data=LoginResponse(token=token, user=UserResponse.model_validate(user)),
     )

@@ -2,4 +2,4 @@
   <div>首页</div>
 </template>
 
-<script></script>
+<script setup></script>
