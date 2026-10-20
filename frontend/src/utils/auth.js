@@ -1,18 +1,17 @@
-//存储token 用户信息 获取token 用户信息 删除token
-
-const TOEKN_KEY = 'token'
+//  存储token、存储用户信息、获取token、用户信息，删除token、用户信息这些作用
+const TOKEN_KEY = 'token'
 const USER_KEY = 'userInfo'
 
 export function getToken() {
-  localStorage.getItem(TOEKN_KEY)
+  return localStorage.getItem(TOKEN_KEY)
 }
 
 export function setToken(token) {
-  localStorage.setItem(TOEKN_KEY, token)
+  localStorage.setItem(TOKEN_KEY, token)
 }
 
 export function removeToken() {
-  localStorage.removeItem(TOEKN_KEY)
+  localStorage.removeItem(TOKEN_KEY)
 }
 
 export function getUserInfo() {
@@ -28,7 +27,7 @@ export function removeUserInfo() {
   localStorage.removeItem(USER_KEY)
 }
 
-//登出
+// 登出
 export function logout() {
   removeToken()
   removeUserInfo()
