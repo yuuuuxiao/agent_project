@@ -65,9 +65,11 @@
 
 <script setup>
 import router from '@/router'
+import { logout } from '@/utils/auth'
 import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
 
 const handleLogout = () => {
+  logout()
   router.push('/login')
 }
 </script>
