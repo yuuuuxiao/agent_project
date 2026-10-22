@@ -1,8 +1,12 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from app.api import files
+from app.config import UPLOAD_DIR
 from app.models.user import User
 from app.database import Base, engine
 from app.api.auth import router as auth_router
 from app.api.user import router as user
+from app.api.files import router as files_router
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from app.common.exceptions import (
@@ -38,6 +42,9 @@ app.add_middleware(
     allow_headers=["*"],  # 允许的请求头
 )
 
+# 挂载静态的文件访问目录
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
 
 @app.get("/")
 def root():
@@ -46,3 +53,4 @@ def root():
 
 app.include_router(auth_router)
 app.include_router(user)
+app.include_router(files_router)
