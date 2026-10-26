@@ -8,8 +8,9 @@ from fastapi import APIRouter, File, UploadFile
 from app.common.exceptions import BusinessException
 from app.common.response import Response
 from app.config import ALLOWED_EXTENSIONS, BASE_DIR, MAX_FILE_SIZE, UPLOAD_DIR
+from app.schemas.file import FileResponse
 
-router = APIRouter(prefix="/files", tags=["文件管理"])
+router = APIRouter(prefix="/api/files", tags=["文件管理"])
 
 
 @router.post("/upload")
@@ -25,10 +26,16 @@ def upload(file: UploadFile = File(...)):
     if ext not in ALLOWED_EXTENSIONS:
         raise BusinessException(message=f"不自持的文件后缀：{ext}")
     # 文件大小校验
-    if file.size and file.size > MAX_FILE_SIZE:
-        raise BusinessException(
-            message=f"文件不能超过 {MAX_FILE_SIZE // 1024 // 1024}MB"
-        )
+    size = file.size
+    if size is None:
+        raise BusinessException(message="无法获取文件大小")
+
+    if size > MAX_FILE_SIZE:
+        raise BusinessException(message="文件超出大小限制")
+
+    # 构造 FileResponse 时
+    size = size
+
     # 设置唯一的文件名称   199323213213_ddadaqwerq.jpg
     disk_name = f"{int(time.time() * 1000)}_{uuid.uuid4().hex[:8]}{ext}"
     # 文件存储的实际路径
@@ -39,10 +46,10 @@ def upload(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, f)
 
     return Response.success(
-        data={
-            "original_name": orignal_name,
-            "disk_name": disk_name,
-            "size": file.size,
-            "url": f"/uploads/{disk_name}",
-        }
+        data=FileResponse(
+            original_name=orignal_name,
+            disk_name=disk_name,
+            size=size,
+            url=f"/uploads/{disk_name}",
+        )
     )

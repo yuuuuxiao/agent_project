@@ -17,14 +17,15 @@
         </div>
 
         <div>
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <div style="display: flex; align-items: center; cursor: pointer">
-              <img src="@/assets/imgs/logo.png" alt="" style="width: 30px; border-radius: 50%" />
-              <div style="margin-left: 3px">管理员</div>
+              <img :src="userInfo?.avatar" alt="" style="width: 30px; border-radius: 50%" />
+              <div style="margin-left: 3px">{{ userInfo?.name }}</div>
             </div>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="handleLogout">退出登录</el-dropdown-item>
+                <el-dropdown-item command="profile">个人信息</el-dropdown-item>
+                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -67,9 +68,15 @@
 import router from '@/router'
 import { logout } from '@/utils/auth'
 import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
+import { useUser } from '@/utils/user'
+const { userInfo } = useUser()
 
-const handleLogout = () => {
-  logout()
-  router.push('/login')
+const handleCommand = (command) => {
+  if (command === 'profile') {
+    router.push('/manager/profile')
+  } else if (command === 'logout') {
+    logout()
+    router.push('/login')
+  }
 }
 </script>
