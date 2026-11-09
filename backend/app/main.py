@@ -3,10 +3,14 @@ from fastapi.staticfiles import StaticFiles
 from app.api import files
 from app.config import UPLOAD_DIR
 from app.models.user import User
+from app.models.lab import Lab
+from app.models.equipment import Equipment
 from app.database import Base, engine
 from app.api.auth import router as auth_router
 from app.api.user import router as user
 from app.api.files import router as files_router
+from app.api.lab import router as lab_router
+from app.api.equipment import router as equipment_router
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from app.common.exceptions import (
@@ -54,3 +58,5 @@ def root():
 app.include_router(auth_router)
 app.include_router(user)
 app.include_router(files_router)
+app.include_router(lab_router)
+app.include_router(equipment_router)

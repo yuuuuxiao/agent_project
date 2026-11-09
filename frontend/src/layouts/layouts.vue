@@ -25,7 +25,8 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="profile">个人信息</el-dropdown-item>
-                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                <el-dropdown-item command="password">修改密码</el-dropdown-item>
+                <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -39,16 +40,16 @@
               <el-icon><icon-menu /></el-icon>
               <span>系统首页</span>
             </el-menu-item>
-            <el-menu-item index="/manager/lab">
-              <el-icon><Document /></el-icon>
+            <el-menu-item v-if="userInfo?.role === 'admin'" index="/manager/lab">
+              <el-icon><House /></el-icon>
               <span>实验室管理</span>
             </el-menu-item>
-            <el-menu-item index="/manager/equ">
-              <el-icon><Location /></el-icon>
-              <span>设备管理</span>
-            </el-menu-item>
-            <el-menu-item index="/manager/user">
+            <el-menu-item v-if="userInfo?.role === 'admin'" index="/manager/equ">
               <el-icon><Setting /></el-icon>
+              <span>设备列表管理</span>
+            </el-menu-item>
+            <el-menu-item v-if="userInfo?.role === 'admin'" index="/manager/user">
+              <el-icon><User /></el-icon>
               <span>用户管理</span>
             </el-menu-item>
           </el-menu>
@@ -74,6 +75,8 @@ const { userInfo } = useUser()
 const handleCommand = (command) => {
   if (command === 'profile') {
     router.push('/manager/profile')
+  } else if (command === 'password') {
+    router.push('/manager/password')
   } else if (command === 'logout') {
     logout()
     router.push('/login')
