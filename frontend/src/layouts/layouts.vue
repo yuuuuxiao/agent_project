@@ -40,6 +40,10 @@
               <el-icon><icon-menu /></el-icon>
               <span>系统首页</span>
             </el-menu-item>
+            <el-menu-item index="/manager/lablist" v-if="userInfo?.role === 'student'">
+              <el-icon><OfficeBuilding /></el-icon>
+              <span>实验室列表</span>
+            </el-menu-item>
             <el-menu-item v-if="userInfo?.role === 'admin'" index="/manager/lab">
               <el-icon><House /></el-icon>
               <span>实验室管理</span>
@@ -51,6 +55,14 @@
             <el-menu-item v-if="userInfo?.role === 'admin'" index="/manager/user">
               <el-icon><User /></el-icon>
               <span>用户管理</span>
+            </el-menu-item>
+            <el-menu-item index="/manager/my-reservation" v-if="userInfo?.role === 'student'">
+              <el-icon><Tickets /></el-icon>
+              <span>我的预约</span>
+            </el-menu-item>
+            <el-menu-item index="/manager/audit-reservation" v-if="userInfo?.role === 'admin'">
+              <el-icon><DocumentChecked /></el-icon>
+              <span>预约审核</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -68,7 +80,15 @@
 <script setup>
 import router from '@/router'
 import { logout } from '@/utils/auth'
-import { Document, Menu as IconMenu, Location, Setting } from '@element-plus/icons-vue'
+import {
+  Menu as IconMenu,
+  House,
+  Setting,
+  User,
+  OfficeBuilding,
+  Tickets,
+  DocumentChecked
+} from '@element-plus/icons-vue'
 import { useUser } from '@/utils/user'
 const { userInfo } = useUser()
 
