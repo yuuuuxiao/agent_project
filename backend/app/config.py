@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     )
 
 
-settings = Settings()
+settings = Settings() # pyright: ignore[reportCallIssue]
 
 MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 UPLOAD_DIR = BASE_DIR / "uploads"

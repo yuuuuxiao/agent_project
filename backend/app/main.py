@@ -16,6 +16,7 @@ from app.api.files import router as files_router
 from app.api.lab import router as lab_router
 from app.api.equipment import router as equipment_router
 from app.api.reservation import router as reservation_router
+from app.api.ai import router as ai_router
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from app.common.exceptions import (
@@ -76,3 +77,4 @@ app.include_router(files_router)
 app.include_router(lab_router)
 app.include_router(equipment_router)
 app.include_router(reservation_router)
+app.include_router(ai_router)
