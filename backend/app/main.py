@@ -1,3 +1,6 @@
+import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from app.api import files
@@ -13,6 +16,7 @@ from app.api.files import router as files_router
 from app.api.lab import router as lab_router
 from app.api.equipment import router as equipment_router
 from app.api.reservation import router as reservation_router
+from app.api.ai import router as ai_router
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from app.common.exceptions import (
@@ -24,9 +28,19 @@ from app.common.exceptions import (
 )
 from starlette.middleware.cors import CORSMiddleware
 
+from app.services import reservation_service
+
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(
+        reservation_service.run_expire_scan()
+    )  # 启动项目开启异步的扫描任务
+    yield
+    task.cancel()  # 关闭项目同时取消异步任务
+
+app = FastAPI(lifespan=lifespan)
 
 # 注册异常处理器
 app.add_exception_handler(BusinessException, bussiness_excpetion_hadler)
@@ -63,3 +77,4 @@ app.include_router(files_router)
 app.include_router(lab_router)
 app.include_router(equipment_router)
 app.include_router(reservation_router)
+app.include_router(ai_router)

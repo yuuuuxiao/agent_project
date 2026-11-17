@@ -10,13 +10,17 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_HOURS: int = 24
+  
+    LLM_API_KEY: str
+    LLM_BASE_URL: str
+    LLM_MODEL: str
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env", env_file_encoding="utf-8"
     )
 
 
-settings = Settings()
+settings = Settings() # pyright: ignore[reportCallIssue]
 
 MAX_FILE_SIZE = 100 * 1024 * 1024  # 100MB
 UPLOAD_DIR = BASE_DIR / "uploads"
